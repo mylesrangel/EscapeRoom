@@ -42,8 +42,10 @@ private:
 
 	float LastDoorOpen;
 
-	AActor* ActorThatOpens; //an actor that triggers the triggervolume
 	AActor* Owner; //find the Owner of the item (door in this case)
+
+	//Returns total mass in KG
+	float GetTotalMassOfActorsOnPlate();
 
 	
 

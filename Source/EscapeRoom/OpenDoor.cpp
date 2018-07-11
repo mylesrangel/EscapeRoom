@@ -2,6 +2,7 @@
 
 #include "OpenDoor.h"
 #include "GameFramework/Actor.h"
+#include "Engine/World.h" //header for GetWorld()
 
 
 
@@ -23,18 +24,23 @@ void UOpenDoor::BeginPlay()
 
 	// ...
 
+	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+
+
+	
+	
+}
+
+void UOpenDoor::OpenDoor() //opens door 60 degrees or so
+{
 	FString OwnerName = GetOwner()->GetName();
 	AActor* Owner = GetOwner();
 
-	FRotator NewRotation = FRotator(0.0F,-50.0F,0.0F);
+	FRotator NewRotation = FRotator(0.0F, -50.0F, 0.0F);
 
 	Owner->SetActorRotation(NewRotation);
-	
-	UE_LOG(LogTemp,Warning,TEXT("%s"), *OwnerName);
 
-
-	
-	
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *OwnerName);
 }
 
 
@@ -44,5 +50,11 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+
+	if (PressurePlate->IsOverlappingActor(ActorThatOpens)) { //if actor is in the pressure plate
+		OpenDoor();
+	}
+
+
 }
 

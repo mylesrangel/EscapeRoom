@@ -26,21 +26,23 @@ void UOpenDoor::BeginPlay()
 
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 
-
+	Owner = GetOwner();
 	
 	
 }
 
 void UOpenDoor::OpenDoor() //opens door 60 degrees or so
 {
-	FString OwnerName = GetOwner()->GetName();
-	AActor* Owner = GetOwner();
 
-	FRotator NewRotation = FRotator(0.0F, -50.0F, 0.0F);
+	Owner->SetActorRotation(FRotator(0.0F, OpenAngle, 0.0F));
 
-	Owner->SetActorRotation(NewRotation);
 
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *OwnerName);
+}
+
+void UOpenDoor::CloseDoor() //opens door 60 degrees or so
+{
+	Owner->SetActorRotation(FRotator(0.0F, 0.0F, 0.0F));
+
 }
 
 
@@ -53,7 +55,15 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (PressurePlate->IsOverlappingActor(ActorThatOpens)) { //if actor is in the pressure plate
 		OpenDoor();
+		LastDoorOpen = GetWorld()->GetTimeSeconds(); //keep track of how long door is open
+		//UE_LOG(LogTemp, Warning, TEXT("LastDoorOpen value %s", LastDoorOpen));
 	}
+	if ((GetWorld()->GetTimeSeconds() - LastDoorOpen) > CloseDoorDelay) {
+		CloseDoor();
+	}
+
+
+	
 
 
 }

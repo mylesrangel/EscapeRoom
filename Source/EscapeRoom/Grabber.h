@@ -4,26 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Engine/TriggerVolume.h"
-#include "OpenDoor.generated.h" //should be last header always
+#include "Grabber.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class ESCAPEROOM_API UOpenDoor : public UActorComponent
+class ESCAPEROOM_API UGrabber : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UOpenDoor();
-	void OpenDoor();
-	void CloseDoor();
+	UGrabber();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	
 
 public:	
 	// Called every frame
@@ -31,22 +26,7 @@ public:
 
 private:
 
-	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate;
-
-	UPROPERTY(EditAnywhere)
-	float CloseDoorDelay = 1.0f;
-
-	UPROPERTY(EditAnywhere)
-	float OpenAngle = -90.f;
-
-	float LastDoorOpen;
-
-	AActor* ActorThatOpens; //an actor that triggers the triggervolume
-	AActor* Owner; //find the Owner of the item (door in this case)
-
-	
-
-
+	//How far a player can 'reach' something
+	float Reach = 100.0f;
 	
 };

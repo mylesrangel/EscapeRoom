@@ -26,6 +26,12 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 	Owner = GetOwner();
+	if (!Owner) { return; }
+	//TODO: Ended here, Checking Pointers to not crash game ran out of disk space
+	if (!PressurePlate) {
+		UE_LOG(LogTemp, Warning, TEXT("%s is missing pressure plate"), *Owner->GetName())
+	}
+	
 }
 
 void UOpenDoor::OpenDoor() //opens door 60 degrees or so
@@ -46,8 +52,8 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (GetTotalMassOfActorsOnPlate() > 20.0f) //TODO change to variable
-	{
+	if (GetTotalMassOfActorsOnPlate() > 20.0f) //TODO change to variable 
+	{											//NOTE: it takes 50.0f to open the doors
 		OpenDoor();
 		LastDoorOpen = GetWorld()->GetTimeSeconds(); //keep track of how long door is open
 		//UE_LOG(LogTemp, Warning, TEXT("LastDoorOpen value %s", LastDoorOpen));
@@ -68,6 +74,8 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate()
 
 	//Find Overlapping actors
 	TArray<AActor*> OverLappingActors;
+	
+	if (!PressurePlate) { return; }
 	PressurePlate->GetOverlappingActors(OUT OverLappingActors);
 
 	//iterate through them adding their mass
